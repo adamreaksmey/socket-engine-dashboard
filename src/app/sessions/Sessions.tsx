@@ -26,7 +26,7 @@ export default function Sessions({ environment }: Props) {
   }, [environment]);
 
   const formatDuration = (connectedAt: string) => {
-    const start = new Date(connectedAt).getTime();
+    const start = new Date(Number(connectedAt) * 1000).getTime();
     const now = Date.now();
     const diff = now - start;
     const minutes = Math.floor(diff / 60000);
@@ -172,7 +172,7 @@ export default function Sessions({ environment }: Props) {
                             <div className="flex items-center space-x-2">
                               <Clock className="w-4 h-4 text-slate-400" />
                               <span>
-                                {new Date(s.connectedAt).toLocaleTimeString()}
+                                {new Date(s.connectedAt * 1000).toLocaleTimeString()}
                               </span>
                             </div>
                           </td>
