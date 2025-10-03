@@ -24,7 +24,7 @@ export default function Sessions() {
     <div className="p-6">
       {/* Back Button */}
       <button
-        onClick={() => router.push("/")}
+        onClick={() => router.push(`/dashboard?environment=${environment}`)}
         className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
       >
         &larr; Back to Dashboard
