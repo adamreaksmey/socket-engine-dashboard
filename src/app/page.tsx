@@ -1,98 +1,31 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { subscribeToStats } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
-export default function Dashboard() {
-  const [stats, setStats] = useState<any>(null);
+const environments = ["local", "dev", "staging", "uat"];
 
-  useEffect(() => {
-    const unsubscribe = subscribeToStats((data) => setStats(data));
-    return unsubscribe;
-  }, []);
+export default function EnvSelect() {
+  const router = useRouter();
 
-  if (!stats) return <div className="p-6">Loading stats...</div>;
+  const handleSelect = (env: string) => {
+    router.push(`/dashboard?environment=${env}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">WebSocket Monitor</h1>
-        <div className="space-x-4">
-          <Link
-            href="/"
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
+      <h1 className="text-3xl font-bold mb-6">Select Environment to Monitor</h1>
+      <div className="grid grid-cols-2 gap-4">
+        {environments.map((env) => (
+          <button
+            disabled={env == "uat"}
+            key={env}
+            onClick={() => handleSelect(env)}
+            className="px-6 cursor-pointer py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            Dashboard
-          </Link>
-          <Link
-            href="/sessions"
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
-          >
-            Sessions
-          </Link>
-          <Link
-            href="/events"
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
-          >
-            Events
-          </Link>
-        </div>
-      </nav>
-
-      {/* Dashboard Content */}
-      <main className="p-6 space-y-6">
-        <h2 className="text-2xl font-bold">Real-Time Dashboard</h2>
-
-        {/* Top Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Active Connections</h3>
-            <p className="text-xl">{stats.totalActiveConnections}</p>
-          </div>
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Total Messages</h3>
-            <p className="text-xl">{stats.totalMessages}</p>
-          </div>
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Last Update</h3>
-            <p>{new Date(stats.timestamp).toLocaleTimeString()}</p>
-          </div>
-        </div>
-
-        {/* Endpoints Table */}
-        <div>
-          <h3 className="text-xl font-bold mt-6">Endpoints</h3>
-          <div className="overflow-x-auto mt-2">
-            <table className="min-w-full border bg-white shadow rounded">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-2 border">Endpoint</th>
-                  <th className="p-2 border">Active</th>
-                  <th className="p-2 border">Sent</th>
-                  <th className="p-2 border">Received</th>
-                  <th className="p-2 border">Avg Size</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.endpoints.map((ep: any) => (
-                  <tr key={ep.endpoint}>
-                    <td className="p-2 border">{ep.endpoint}</td>
-                    <td className="p-2 border">{ep.activeConnections}</td>
-                    <td className="p-2 border">{ep.messagesSent}</td>
-                    <td className="p-2 border">{ep.messagesReceived}</td>
-                    <td className="p-2 border">
-                      {ep.avgMessageSize.toFixed(2)} B
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </main>
+            {env.toUpperCase()}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

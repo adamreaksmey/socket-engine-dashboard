@@ -3,20 +3,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { fetchSessions } from "@/lib/api";
 
 export default function Sessions() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const environment = searchParams.get("environment") || "local";
 
   useEffect(() => {
-    fetchSessions().then((data) => {
+    fetchSessions(environment).then((data) => {
       setSessions(data);
       setLoading(false);
     });
-  }, []);
+  }, [environment]);
 
   return (
     <div className="p-6">

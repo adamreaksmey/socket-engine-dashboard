@@ -3,7 +3,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { subscribeToEvents } from "@/lib/api";
 
 export default function Events() {
@@ -11,14 +11,19 @@ export default function Events() {
   const [filter, setFilter] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const environment = searchParams.get("environment") || "local";
 
   useEffect(() => {
-    const unsubscribe = subscribeToEvents((event) => {
-      setEvents((prev) => [event, ...prev].slice(0, 100));
-      setLoading(false); // first event arrived
-    });
+    const unsubscribe = subscribeToEvents(
+      (event) => {
+        setEvents((prev) => [event, ...prev].slice(0, 100));
+        setLoading(false);
+      },
+      environment
+    );
     return unsubscribe;
-  }, []);
+  }, [environment]);
 
   const filteredEvents = events.filter((e) => {
     const search = filter.toLowerCase();
@@ -39,7 +44,7 @@ export default function Events() {
         &larr; Back to Dashboard
       </button>
 
-      <h1 className="text-2xl font-bold">Monitoring Events</h1>
+      <h1 className="text-2xl font-bold">Monitoring Events ({environment})</h1>
 
       {/* Filter Input */}
       <input
@@ -62,8 +67,8 @@ export default function Events() {
             className="p-3 border rounded bg-gray-50 shadow text-sm font-mono"
           >
             <div className="mb-1">
-              <strong className="text-blue-600">{e.type}</strong>{" "}
-              @ <span className="text-gray-700">{e.endpoint || "-"}</span> (
+              <strong className="text-blue-600">{e.type}</strong> @{" "}
+              <span className="text-gray-700">{e.endpoint || "-"}</span> (
               {e.sessionId || "N/A"})
             </div>
             <pre className="bg-gray-100 p-2 rounded overflow-x-auto text-xs">
