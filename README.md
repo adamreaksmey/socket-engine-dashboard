@@ -13,6 +13,7 @@
 
 ## Screenshots
 
+![Choose Env](docs/choose-env.png)
 ![Dashboard](docs/dashboard.png)
 ![Events](docs/events.png)
 ![Sessions](docs/sessions.png)
