@@ -52,7 +52,7 @@ export default function Dashboard({ environment }: Props) {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-900">
-                    WebSocket Monitor
+                  WebSocket Monitor
                 </h1>
                 <Badge variant="secondary" className="text-xs mt-0.5">
                   {environment}
@@ -102,7 +102,7 @@ export default function Dashboard({ environment }: Props) {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-slate-700">
@@ -148,6 +148,27 @@ export default function Dashboard({ environment }: Props) {
               </div>
               <p className="text-xs text-slate-600 mt-1">
                 {new Date(stats.timestamp * 1000).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-white hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-700">
+                Last Clean up time
+              </CardTitle>
+              <Clock className="h-5 w-5 text-emerald-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-slate-900">
+                {new Date(stats.lastStatsCleanup * 1000).toLocaleTimeString()}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">
+                {new Date(stats.lastStatsCleanup * 1000).toLocaleDateString("en-US", {
                   month: "short",
                   day: "2-digit",
                   year: "numeric",
