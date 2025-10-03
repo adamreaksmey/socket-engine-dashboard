@@ -20,7 +20,7 @@ export default function EnvSelect() {
             disabled={env == "uat"}
             key={env}
             onClick={() => handleSelect(env)}
-            className="px-6 cursor-pointer py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className={`px-6 cursor-pointer py-4 ${env != "uat" ? `bg-blue-600 hover:bg-blue-700` : 'bg-black'} text-white rounded-lg transition`}
           >
             {env.toUpperCase()}
           </button>

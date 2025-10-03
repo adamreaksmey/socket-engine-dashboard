@@ -4,12 +4,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchStats, subscribeToStats } from "@/lib/api";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function Dashboard() {
   const [stats, setStats] = useState<any>(null);
   const searchParams = useSearchParams();
   const environment = searchParams.get("environment") || "local";
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = subscribeToStats((data) => setStats(data), environment);
@@ -18,7 +19,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchStats(environment).then(setStats);
-  }, [environment])
+  }, [environment]);
 
   if (!stats) return <div className="p-6">Loading stats...</div>;
 
@@ -29,19 +30,13 @@ export default function Dashboard() {
         <h1 className="text-xl font-bold">WebSocket Monitor</h1>
         <div className="space-x-4">
           <Link
-            href="/"
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
-          >
-            Dashboard
-          </Link>
-          <Link
-            href="/sessions"
+            href={`/sessions?environment=${environment}`}
             className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
           >
             Sessions
           </Link>
           <Link
-            href="/events"
+            href={`/events?environment=${environment}`}
             className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
           >
             Events
@@ -51,6 +46,14 @@ export default function Dashboard() {
 
       {/* Dashboard Content */}
       <main className="p-6 space-y-6">
+        {/* Switch Environment Button */}
+        <button
+          onClick={() => router.push("/")}
+          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          &larr; Switch Environment
+        </button>
+
         <h2 className="text-2xl font-bold">Real-Time Dashboard</h2>
 
         {/* Top Stats */}
@@ -90,9 +93,7 @@ export default function Dashboard() {
                     <td className="p-2 border">{ep.activeConnections}</td>
                     <td className="p-2 border">{ep.messagesSent}</td>
                     <td className="p-2 border">{ep.messagesReceived}</td>
-                    <td className="p-2 border">
-                      {ep.avgMessageSize.toFixed(2)} B
-                    </td>
+                    <td className="p-2 border">{ep.avgMessageSize.toFixed(2)} B</td>
                   </tr>
                 ))}
               </tbody>
