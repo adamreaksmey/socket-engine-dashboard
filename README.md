@@ -100,14 +100,27 @@ The dashboard handles the following SSE event types:
 ### Folder Structure
 
 ```
-.
-├─ app/                  # Next.js pages
-│  ├─ dashboard/         # Dashboard page
-│  ├─ events/            # Events page
-│  └─ sessions/          # Sessions page
-├─ lib/
-│  └─ api.ts             # API & SSE helpers
-├─ public/
-├─ styles/
-└─ .env.local
+src
+├── app
+│  ├── dashboard
+│  │  ├── Dashboard.tsx
+│  │  └── page.tsx         # Main dashboard, choose environment here
+│  ├── events
+│  │  ├── Events.tsx
+│  │  └── page.tsx         # Event dashboard, track pub/sub events
+│  ├── sessions
+│  │  ├── Sessions.tsx
+│  │  └── page.tsx         # Session dashboard, track alive and dead sessions
+│  ├── favicon.ico
+│  ├── globals.css
+│  ├── layout.tsx
+│  └── page.tsx
+├── components
+│  └── ui
+│     ├── badge.tsx
+│     ├── button.tsx
+│     └── card.tsx
+└── lib
+   ├── api.ts
+   └── utils.ts
 ```
