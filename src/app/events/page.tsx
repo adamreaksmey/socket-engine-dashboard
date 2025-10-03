@@ -1,5 +1,17 @@
 import Events from "./Events";
 
-export default function Page({ searchParams }: { searchParams: { environment?: string } }) {
-  return <Events environment={searchParams.environment || "local"} />;
+interface SearchParams {
+  environment?: string;
 }
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const environment = params?.environment || "local";
+
+  return <Events environment={environment} />;
+}
+

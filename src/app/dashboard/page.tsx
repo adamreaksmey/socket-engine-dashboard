@@ -1,5 +1,16 @@
 import Dashboard from "./Dashboard";
 
-export default function Page({ searchParams }: { searchParams: { environment?: string } }) {
-  return <Dashboard environment={searchParams.environment || "local"} />;
+interface SearchParams {
+  environment?: string;
+}
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const params = await searchParams;
+  const environment = params?.environment || "local";
+
+  return <Dashboard environment={environment} />;
 }
