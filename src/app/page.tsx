@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-const environments = ["local", "dev", "staging", "uat"];
+const environments = [ "dev", "staging", "uat"];
 
 export default function EnvSelect() {
   const router = useRouter();

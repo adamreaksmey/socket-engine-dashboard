@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchStats, subscribeToStats } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Activity, MessageSquare, Clock, ArrowLeft, Radio } from "lucide-react";
 
 interface Props {
     environment: string;
@@ -23,85 +27,196 @@ export default function Dashboard({ environment }: Props) {
     fetchStats(environment).then(setStats);
   }, [environment]);
 
-  if (!stats) return <div className="p-6">Loading stats...</div>;
+  if (!stats) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 animate-pulse">
+            <Activity className="w-8 h-8 text-blue-600" />
+          </div>
+          <p className="text-lg text-slate-600 font-medium">Loading stats...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-50">
       {/* Navigation */}
-      <nav className="bg-white shadow p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">WebSocket Monitor</h1>
-        <div className="space-x-4">
-          <Link
-            href={`/sessions?environment=${environment}`}
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
-          >
-            Sessions
-          </Link>
-          <Link
-            href={`/events?environment=${environment}`}
-            className="px-3 py-1 rounded hover:bg-gray-100 font-medium"
-          >
-            Events
-          </Link>
+      <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                <Radio className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-slate-900">WebSocket Monitor</h1>
+                <Badge variant="secondary" className="text-xs mt-0.5">
+                  {environment}
+                </Badge>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" asChild>
+                <Link href={`/sessions?environment=${environment}`}>
+                  Sessions
+                </Link>
+              </Button>
+              <Button variant="ghost" asChild>
+                <Link href={`/events?environment=${environment}`}>
+                  Events
+                </Link>
+              </Button>
+            </div>
+          </div>
         </div>
       </nav>
 
       {/* Dashboard Content */}
-      <main className="p-6 space-y-6">
-        {/* Switch Environment Button */}
-        <button
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Back Button */}
+        <Button
           onClick={() => router.push("/")}
-          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          variant="outline"
+          className="group"
         >
-          &larr; Switch Environment
-        </button>
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          Switch Environment
+        </Button>
 
-        <h2 className="text-2xl font-bold">Real-Time Dashboard</h2>
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-slate-900">Real-Time Dashboard</h2>
+            <p className="text-slate-600 mt-1">Monitor your WebSocket connections and activity</p>
+          </div>
+          <div className="flex items-center space-x-2 text-sm text-slate-500">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span>Live</span>
+          </div>
+        </div>
 
-        {/* Top Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Active Connections</h3>
-            <p className="text-xl">{stats.totalActiveConnections}</p>
-          </div>
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Total Messages</h3>
-            <p className="text-xl">{stats.totalMessages}</p>
-          </div>
-          <div className="p-4 bg-white shadow rounded">
-            <h3 className="font-semibold">Last Update</h3>
-            <p>{new Date(stats.timestamp).toLocaleTimeString()}</p>
-          </div>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-700">
+                Active Connections
+              </CardTitle>
+              <Activity className="h-5 w-5 text-blue-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-slate-900">
+                {stats.totalActiveConnections}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">
+                Currently connected clients
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-700">
+                Total Messages
+              </CardTitle>
+              <MessageSquare className="h-5 w-5 text-purple-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-slate-900">
+                {stats.totalMessages.toLocaleString()}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">
+                Messages exchanged
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-emerald-200 bg-gradient-to-br from-emerald-50 to-white hover:shadow-lg transition-shadow">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium text-slate-700">
+                Last Update
+              </CardTitle>
+              <Clock className="h-5 w-5 text-emerald-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-slate-900">
+                {new Date(stats.timestamp).toLocaleTimeString()}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">
+                {new Date(stats.timestamp).toLocaleDateString()}
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Endpoints Table */}
-        <div>
-          <h3 className="text-xl font-bold mt-6">Endpoints</h3>
-          <div className="overflow-x-auto mt-2">
-            <table className="min-w-full border bg-white shadow rounded">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-2 border">Endpoint</th>
-                  <th className="p-2 border">Active</th>
-                  <th className="p-2 border">Sent</th>
-                  <th className="p-2 border">Received</th>
-                  <th className="p-2 border">Avg Size</th>
-                </tr>
-              </thead>
-              <tbody>
-                {stats.endpoints.map((ep: any) => (
-                  <tr key={ep.endpoint}>
-                    <td className="p-2 border">{ep.endpoint}</td>
-                    <td className="p-2 border">{ep.activeConnections}</td>
-                    <td className="p-2 border">{ep.messagesSent}</td>
-                    <td className="p-2 border">{ep.messagesReceived}</td>
-                    <td className="p-2 border">{ep.avgMessageSize.toFixed(2)} B</td>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">Endpoint Statistics</CardTitle>
+            <p className="text-sm text-slate-600">
+              Detailed metrics for each WebSocket endpoint
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left py-3 px-4 font-semibold text-slate-700 text-sm">
+                      Endpoint
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-slate-700 text-sm">
+                      Active
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-slate-700 text-sm">
+                      Sent
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-slate-700 text-sm">
+                      Received
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-slate-700 text-sm">
+                      Avg Size
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                </thead>
+                <tbody>
+                  {stats.endpoints.map((ep: any, idx: number) => (
+                    <tr
+                      key={ep.endpoint}
+                      className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${
+                        idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'
+                      }`}
+                    >
+                      <td className="py-3 px-4">
+                        <code className="text-sm font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                          {ep.endpoint}
+                        </code>
+                      </td>
+                      <td className="py-3 px-4">
+                        <Badge variant={ep.activeConnections > 0 ? "default" : "secondary"}>
+                          {ep.activeConnections}
+                        </Badge>
+                      </td>
+                      <td className="py-3 px-4 text-slate-700">
+                        {ep.messagesSent.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-slate-700">
+                        {ep.messagesReceived.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-slate-700">
+                        <span className="font-mono text-sm">
+                          {ep.avgMessageSize.toFixed(2)} B
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
