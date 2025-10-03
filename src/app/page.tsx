@@ -32,7 +32,7 @@ const environments = [
     borderColor: "border-blue-200 hover:border-blue-400",
   },
   {
-    name: "development",
+    name: "dev",
     label: "Development",
     description: "Local development environment",
     icon: Zap,
@@ -71,7 +71,7 @@ export default function EnvironmentSelector() {
               </div>
             </div>
           </div>
-          <h1 className="text-5xl font-bold text-white">WebSocket Monitor</h1>
+          <h1 className="text-5xl font-bold text-white">Auction - Socket Monitor</h1>
           <p className="text-xl text-slate-300">
             Select your environment to start monitoring
           </p>

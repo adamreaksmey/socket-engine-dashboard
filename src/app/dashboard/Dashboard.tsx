@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Activity, MessageSquare, Clock, ArrowLeft, Radio } from "lucide-react";
 
 interface Props {
-    environment: string;
+  environment: string;
 }
 
 export default function Dashboard({ environment }: Props) {
@@ -51,7 +51,9 @@ export default function Dashboard({ environment }: Props) {
                 <Radio className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">WebSocket Monitor</h1>
+                <h1 className="text-xl font-bold text-slate-900">
+                    WebSocket Monitor
+                </h1>
                 <Badge variant="secondary" className="text-xs mt-0.5">
                   {environment}
                 </Badge>
@@ -64,9 +66,7 @@ export default function Dashboard({ environment }: Props) {
                 </Link>
               </Button>
               <Button variant="ghost" asChild>
-                <Link href={`/events?environment=${environment}`}>
-                  Events
-                </Link>
+                <Link href={`/events?environment=${environment}`}>Events</Link>
               </Button>
             </div>
           </div>
@@ -88,8 +88,12 @@ export default function Dashboard({ environment }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-slate-900">Real-Time Dashboard</h2>
-            <p className="text-slate-600 mt-1">Monitor your WebSocket connections and activity</p>
+            <h2 className="text-3xl font-bold text-slate-900">
+              Real-Time Dashboard
+            </h2>
+            <p className="text-slate-600 mt-1">
+              Monitor your WebSocket connections and activity
+            </p>
           </div>
           <div className="flex items-center space-x-2 text-sm text-slate-500">
             <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
@@ -127,9 +131,7 @@ export default function Dashboard({ environment }: Props) {
               <div className="text-3xl font-bold text-slate-900">
                 {stats.totalMessages.toLocaleString()}
               </div>
-              <p className="text-xs text-slate-600 mt-1">
-                Messages exchanged
-              </p>
+              <p className="text-xs text-slate-600 mt-1">Messages exchanged</p>
             </CardContent>
           </Card>
 
@@ -142,10 +144,14 @@ export default function Dashboard({ environment }: Props) {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-slate-900">
-                {new Date(stats.timestamp).toLocaleTimeString()}
+                {new Date(stats.timestamp * 1000).toLocaleTimeString()}
               </div>
               <p className="text-xs text-slate-600 mt-1">
-                {new Date(stats.timestamp).toLocaleDateString()}
+                {new Date(stats.timestamp * 1000).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "2-digit",
+                  year: "numeric",
+                })}
               </p>
             </CardContent>
           </Card>
@@ -186,7 +192,7 @@ export default function Dashboard({ environment }: Props) {
                     <tr
                       key={ep.endpoint}
                       className={`border-b border-slate-100 hover:bg-slate-50 transition-colors ${
-                        idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'
+                        idx % 2 === 0 ? "bg-white" : "bg-slate-50/50"
                       }`}
                     >
                       <td className="py-3 px-4">
@@ -195,7 +201,11 @@ export default function Dashboard({ environment }: Props) {
                         </code>
                       </td>
                       <td className="py-3 px-4">
-                        <Badge variant={ep.activeConnections > 0 ? "default" : "secondary"}>
+                        <Badge
+                          variant={
+                            ep.activeConnections > 0 ? "default" : "secondary"
+                          }
+                        >
                           {ep.activeConnections}
                         </Badge>
                       </td>
