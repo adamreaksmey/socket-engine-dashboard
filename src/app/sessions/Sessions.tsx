@@ -92,6 +92,50 @@ export default function Sessions({ environment }: Props) {
           </div>
         </div>
 
+                    {/* Summary Cards */}
+            {sessions.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Card className="border-green-200 bg-gradient-to-br from-green-50 to-white">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-slate-700">
+                      Total Sessions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-slate-900">
+                      {sessions.length}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-slate-700">
+                      Unique Endpoints
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-slate-900">
+                      {new Set(sessions.map((s) => s.uri)).size}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-slate-700">
+                      Unique IPs
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-slate-900">
+                      {new Set(sessions.map((s) => s.remoteAddress)).size}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
         {/* Loading State */}
         {loading ? (
           <Card>
@@ -207,50 +251,6 @@ export default function Sessions({ environment }: Props) {
                 </div>
               </CardContent>
             </Card>
-
-            {/* Summary Cards */}
-            {sessions.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card className="border-green-200 bg-gradient-to-br from-green-50 to-white">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-700">
-                      Total Sessions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-slate-900">
-                      {sessions.length}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-700">
-                      Unique Endpoints
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-slate-900">
-                      {new Set(sessions.map((s) => s.uri)).size}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-slate-700">
-                      Unique IPs
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold text-slate-900">
-                      {new Set(sessions.map((s) => s.remoteAddress)).size}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
           </>
         )}
       </main>
